@@ -388,6 +388,8 @@ def create_blog_generation_graph():
     
     return workflow
 
+BLOG_GRAPH = create_blog_generation_graph()  # <-- Assign to global
+graph_runnable = BLOG_GRAPH.compile() 
 # Function to run the graph
 def generate_technical_blog(topic: str):
     global BLOG_GRAPH
@@ -406,8 +408,7 @@ def generate_technical_blog(topic: str):
     }
     
     # Create and compile the graph
-    BLOG_GRAPH = create_blog_generation_graph()  # <-- Assign to global
-    graph_runnable = BLOG_GRAPH.compile()
+
     
     # Execute the graph
     for output in graph_runnable.stream(initial_state):
