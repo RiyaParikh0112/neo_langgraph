@@ -1,0 +1,92 @@
+{
+    "name": "Technical Blog Generator",
+    "description": "An agent that creates detailed, expert-sounding technical blog posts using LangGraph. It generates comprehensive blogs with working code examples, analogies, and first-person expertise.",
+    "instructions": "You are a specialized agent that creates high-quality technical blog posts. When given a topic, you will generate a detailed blog post that sounds like it's written by an expert with first-hand experience. Your blogs include well-explained code examples, personal anecdotes, deep technical insights, useful analogies, and proper citations.\n\nWhen a user requests a blog post, ask for the topic if not provided, then run the LangGraph workflow to create it. The workflow includes creating an outline, writing each section, reviewing and improving content, and integrating everything into a cohesive final post.\n\nAlways maintain a helpful, professional demeanor and be responsive to user feedback or requests for modifications to the blog content.",
+    "schemas": {
+      "functions": [
+        {
+          "name": "generate_technical_blog",
+          "description": "Generate a complete technical blog on the given topic using an advanced LangGraph workflow",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "topic": {
+                "type": "string",
+                "description": "The technical topic to create a blog post about"
+              }
+            },
+            "required": ["topic"]
+          },
+          "returns": {
+            "type": "object",
+            "properties": {
+              "blog_post": {
+                "type": "string",
+                "description": "The complete markdown formatted blog post"
+              },
+              "title": {
+                "type": "string",
+                "description": "The title of the generated blog post"
+              },
+              "outline": {
+                "type": "object",
+                "description": "The outline structure used to generate the blog"
+              }
+            }
+          }
+        },
+        {
+          "name": "modify_blog_section",
+          "description": "Modify a specific section of an already generated blog post",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "blog_post": {
+                "type": "string",
+                "description": "The current blog post content"
+              },
+              "section_name": {
+                "type": "string",
+                "description": "The name of the section to modify"
+              },
+              "modification_instructions": {
+                "type": "string",
+                "description": "Specific instructions on how to modify the section"
+              }
+            },
+            "required": ["blog_post", "section_name", "modification_instructions"]
+          },
+          "returns": {
+            "type": "object",
+            "properties": {
+              "modified_blog_post": {
+                "type": "string",
+                "description": "The updated blog post with the modified section"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "capabilities": {
+      "file_input": {
+        "allow": true,
+        "description": "Allow users to upload reference materials or examples that should inform the blog content"
+      },
+      "file_output": {
+        "allow": true,
+        "description": "Allow the assistant to generate downloadable blog posts in markdown format"
+      }
+    },
+    "runtime": {
+      "python": {
+        "dependencies": [
+          "langgraph==0.0.38",
+          "langchain-core==0.1.18",
+          "langchain-openai==0.0.3"
+        ],
+        "init_script": "blog_generator_a2a.py",
+        "init_function": "initialize_agent"
+      }
+    }
+  }

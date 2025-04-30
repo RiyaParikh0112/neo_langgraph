@@ -13,6 +13,8 @@ load_dotenv()  # This loads variables from .env into environment
 
 api_key = os.getenv("OPENAI_API_KEY") # Replace with your key
 os.environ["OPENAI_API_KEY"] = api_key
+
+BLOG_GRAPH = None
 # State definition
 class AgentState(TypedDict):
     messages: List[Union[SystemMessage, HumanMessage, AIMessage]]
@@ -388,6 +390,7 @@ def create_blog_generation_graph():
 
 # Function to run the graph
 def generate_technical_blog(topic: str):
+    global BLOG_GRAPH
     """Generate a complete technical blog on the given topic"""
     # Initialize the state
     initial_state = {
@@ -403,8 +406,8 @@ def generate_technical_blog(topic: str):
     }
     
     # Create and compile the graph
-    graph = create_blog_generation_graph()
-    graph_runnable = graph.compile()
+    BLOG_GRAPH = create_blog_generation_graph()  # <-- Assign to global
+    graph_runnable = BLOG_GRAPH.compile()
     
     # Execute the graph
     for output in graph_runnable.stream(initial_state):
